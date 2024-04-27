@@ -3,6 +3,8 @@ use axum::{
     http::StatusCode,
     response::IntoResponse,
 };
+use serde_json::Value;
+use crate::questions_database::questions_module;
 
 /// Returns all questions from the database
 pub async fn get_questions() -> impl IntoResponse {
@@ -45,5 +47,53 @@ pub async fn delete_question(Path(id): Path<String>) -> impl IntoResponse {
         let error_response = serde_json::json!({"error":"Question does not exist!"});
 
         Err(Json(error_response))
+    }
+}
+
+/// Adds a new question to the questions' database.
+/// This function takes a JSON payloads as input and attempts to add a new entry to the database
+pub async fn add_question(Json(input): Json<Value>) -> impl IntoResponse {
+    let mut database = crate::questions_database::QUESTIONS_DATABASE.write().unwrap();
+    // Check if the input payload contains the required fields
+    let required_fields = ["question_id", "question_title", "type_of_content", "type_of_question"];
+    let missing_fields = required_fields.iter().find(|&&field| input.get(field).is_none());
+
+    if let Some(field) = missing_fields {
+        let error_response = serde_json::json!({
+            "error": format!("Missing fields. Required: {}", field)
+        });
+        return Err((StatusCode::BAD_REQUEST, Json(error_response)));
+    }
+
+    let question = extracted_question(&input);
+
+    // Check if a question with the specified ID already exists
+    if database.iter().any(|q| q.question_id == question.question_id) {
+        let error_response = serde_json::json!({
+            "error": "Duplicate ID exists"
+        });
+        return Err((StatusCode::CONFLICT, Json(error_response)));
+    }
+
+    database.push(question);
+    let response_body = serde_json::json!({
+        "message": "Question added successfully"
+    });
+    Ok(Json(response_body))
+}
+
+/// Extracts a question object from a JSON payload as a input
+fn extracted_question(input: &Value) -> questions_module::Question{
+    questions_module::Question{
+        // Extract the required fields from the input payload
+        question_id: input["question_id"].as_str().unwrap().to_string(),
+        question_title: input["question_title"].as_str().unwrap().to_string(),
+        type_of_content: input["type_of_content"].as_str().unwrap().to_string(),
+        type_of_question: input["type_of_question"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|type_of_question| type_of_question.as_str().unwrap().to_string())
+            .collect(),
     }
 }

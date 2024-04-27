@@ -10,9 +10,9 @@ mod request_routes;
 /// Imports routes from the `request_routes` module
 use request_routes::setup_routes;
 
-//! Entry point for the application
-//! Sets up TCP listener for the server, binds it to a specific address,
-//! and runs the server using Axum
+// Entry point for the application
+// Sets up TCP listener for the server, binds it to a specific address,
+// and runs the server using Axum
 #[tokio::main]
 async fn main() {
     /* Set up the routes for the server */
