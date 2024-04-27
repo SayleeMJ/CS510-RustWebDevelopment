@@ -25,3 +25,19 @@ pub async fn get_question_by_id(Path(id): Path<String>) -> impl IntoResponse {
         Err((StatusCode::NOT_FOUND, error_response))
     }
 }
+
+pub async fn delete_question(Path(id): Path<String>) -> impl IntoResponse {
+    let mut database = crate::questions_database::QUESTIONS_DATABASE
+        .write()
+        .unwrap();
+    if let Some(question_index) = database.iter().position(|q| q.question_id == id) {
+        database.remove(question_index);
+        let response_body = serde_json::json!({"status":"Deleted Successfully!"});
+
+        Ok(Json(response_body))
+    } else {
+        let error_response = serde_json::json!({"error":"Question does not exist!"});
+
+        Err(Json(error_response))
+    }
+}
