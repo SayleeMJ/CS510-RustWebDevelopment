@@ -1,9 +1,13 @@
 use lazy_static::lazy_static;
 use std::sync::RwLock;
 
+/// Defines the structure and functionalities for managing questions
 pub mod questions_module {
+
     use serde::{Deserialize, Serialize};
 
+    /// Represents a single question in the database
+    /// Each question includes an ID, title, content type and a list of question categories
     #[derive(Debug, Clone, Serialize, Deserialize)]
     pub struct Question {
         pub question_id: String,
@@ -18,6 +22,7 @@ lazy_static! {
         RwLock::new(Vec::new());
 }
 
+/// Initializes the database into JSON format
 pub fn initialize_questions_database() {
     let mut questions_data = QUESTIONS_DATABASE.write().unwrap();
     questions_data.push(questions_module::Question {

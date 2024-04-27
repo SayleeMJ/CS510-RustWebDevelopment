@@ -6,6 +6,7 @@ use crate::{
     request_handlers::{get_question_by_id, get_questions,delete_question},
 };
 
+/// Sets up the routes for the application
 pub fn setup_routes() -> Router {
     questions_database::initialize_questions_database();
 
