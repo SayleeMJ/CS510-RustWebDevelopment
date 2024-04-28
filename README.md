@@ -18,6 +18,8 @@ This project in Rust includes a RESTful API for question database management co
 - GET /getQuestions - Retrieve a list of all questions.
 - GET /getQuestionByID/:id - Retrieve a specific question by its ID.
 - DELETE /deleteQuestion/:id - Delete a question by its ID.
+- CREATE /addQuestion - Add a new question.
+- UPDATE /updateQuestion/:id - Updates a question of specific ID.
 
 ### Prerequisites
 Rust and Cargo installed (https://www.rust-lang.org/tools/install)
