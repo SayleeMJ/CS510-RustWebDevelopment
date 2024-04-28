@@ -1,10 +1,10 @@
+use crate::questions_database::questions_module;
 use axum::{
     extract::{Json, Path},
     http::StatusCode,
     response::IntoResponse,
 };
 use serde_json::Value;
-use crate::questions_database::questions_module;
 
 /// Returns all questions from the database
 pub async fn get_questions() -> impl IntoResponse {
@@ -13,7 +13,6 @@ pub async fn get_questions() -> impl IntoResponse {
         .unwrap();
     Json(questions_db.clone())
 }
-
 
 /// Gets a specific question from the database by its unique ID
 /// Returns the question if found, or an error response if not found
@@ -53,10 +52,19 @@ pub async fn delete_question(Path(id): Path<String>) -> impl IntoResponse {
 /// Adds a new question to the questions' database.
 /// This function takes a JSON payloads as input and attempts to add a new entry to the database
 pub async fn add_question(Json(input): Json<Value>) -> impl IntoResponse {
-    let mut database = crate::questions_database::QUESTIONS_DATABASE.write().unwrap();
+    let mut database = crate::questions_database::QUESTIONS_DATABASE
+        .write()
+        .unwrap();
     // Check if the input payload contains the required fields
-    let required_fields = ["question_id", "question_title", "type_of_content", "type_of_question"];
-    let missing_fields = required_fields.iter().find(|&&field| input.get(field).is_none());
+    let required_fields = [
+        "question_id",
+        "question_title",
+        "type_of_content",
+        "type_of_question",
+    ];
+    let missing_fields = required_fields
+        .iter()
+        .find(|&&field| input.get(field).is_none());
 
     if let Some(field) = missing_fields {
         let error_response = serde_json::json!({
@@ -68,7 +76,10 @@ pub async fn add_question(Json(input): Json<Value>) -> impl IntoResponse {
     let question = extracted_question(&input);
 
     // Check if a question with the specified ID already exists
-    if database.iter().any(|q| q.question_id == question.question_id) {
+    if database
+        .iter()
+        .any(|q| q.question_id == question.question_id)
+    {
         let error_response = serde_json::json!({
             "error": "Duplicate ID exists"
         });
@@ -100,7 +111,10 @@ fn extracted_question(input: &Value) -> questions_module::Question {
 
 /// This function retrieves a question by its `id` and updates its fields. If the specified question exists,
 /// its details are updated or an error response if not found.
-pub async fn update_question(Path(id): Path<String>, Json(input): Json<Value>) -> impl IntoResponse {
+pub async fn update_question(
+    Path(id): Path<String>,
+    Json(input): Json<Value>,
+) -> impl IntoResponse {
     let mut database = crate::questions_database::QUESTIONS_DATABASE
         .write()
         .unwrap();
