@@ -83,8 +83,8 @@ pub async fn add_question(Json(input): Json<Value>) -> impl IntoResponse {
 }
 
 /// Extracts a question object from a JSON payload as a input
-fn extracted_question(input: &Value) -> questions_module::Question{
-    questions_module::Question{
+fn extracted_question(input: &Value) -> questions_module::Question {
+    questions_module::Question {
         // Extract the required fields from the input payload
         question_id: input["question_id"].as_str().unwrap().to_string(),
         question_title: input["question_title"].as_str().unwrap().to_string(),
@@ -95,5 +95,44 @@ fn extracted_question(input: &Value) -> questions_module::Question{
             .iter()
             .map(|type_of_question| type_of_question.as_str().unwrap().to_string())
             .collect(),
+    }
+}
+
+/// This function retrieves a question by its `id` and updates its fields. If the specified question exists,
+/// its details are updated or an error response if not found.
+pub async fn update_question(Path(id): Path<String>, Json(input): Json<Value>) -> impl IntoResponse {
+    let mut database = crate::questions_database::QUESTIONS_DATABASE
+        .write()
+        .unwrap();
+
+    if let Some(question_index) = database.iter().position(|q| q.question_id == id) {
+        let mut current_question = database[question_index].clone();
+
+        if let Some(question_title) = input.get("question_title") {
+            current_question.question_title = question_title.as_str().unwrap().to_string();
+        }
+        if let Some(type_of_content) = input.get("type_of_content") {
+            current_question.type_of_content = type_of_content.as_str().unwrap().to_string();
+        }
+        if let Some(type_of_question) = input.get("type_of_question") {
+            current_question.type_of_question = type_of_question
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|type_of_question| type_of_question.as_str().unwrap().to_string())
+                .collect();
+        }
+
+        database[question_index] = current_question.clone();
+
+        let response_body = serde_json::json!({
+            "message": "Question updated the successfully of current question index",
+        });
+        Ok(Json(response_body))
+    } else {
+        let error_response = Json(serde_json::json!({
+            "error": "Question does not exist!"
+        }));
+        Err((StatusCode::NOT_FOUND, error_response))
     }
 }
