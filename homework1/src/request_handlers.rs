@@ -4,9 +4,10 @@ use axum::{
     http::StatusCode,
     response::IntoResponse,
 };
-use serde_json::json;
+use serde_json::{json};
 use sqlx::PgPool;
 use std::sync::Arc;
+// use crate::questions_database::questions_module;
 
 /// Retrieves every question from the database.
 ///
@@ -55,24 +56,38 @@ pub async fn get_question_by_id(
     }
 }
 
-// /// Deletes a specific question from the database by its unique ID
-// /// Returns a success response if found and the question was deleted, or an error response if not found
-// pub async fn delete_question(Path(id): Path<String>) -> impl IntoResponse {
-//     let mut database = crate::questions_database::QUESTIONS_DATABASE
-//         .write()
-//         .unwrap();
-//     if let Some(question_index) = database.iter().position(|q| q.question_id == id) {
-//         database.remove(question_index);
-//         let response_body = serde_json::json!({"status":"Deleted Successfully!"});
-//
-//         Ok(Json(response_body))
-//     } else {
-//         let error_response = serde_json::json!({"error":"Question does not exist!"});
-//
-//         Err(Json(error_response))
-//     }
-// }
-//
+/// Uses the question's ID to remove it from the database.
+///
+/// # Arguments
+/// * `q_id` - The question's ID to delete
+/// * `database_pool` - A state that contains the database connection pool
+///
+/// # Returns
+/// When a question is removed, a success message appears; if the question cannot be located, an error message appears.
+pub async fn delete_question(
+    Path(q_id): Path<i32>,
+    State(database_pool): State<Arc<PgPool>>,
+) -> impl IntoResponse {
+    let delete_result = sqlx::query("DELETE FROM questions_table WHERE question_id = $1")
+        .bind(q_id)
+        .execute(&*database_pool)
+        .await;
+
+    if let Ok(question_deleted) = delete_result {
+        if question_deleted.rows_affected() > 0 {
+            let success_message = json!({"message":"Question deleted successfully"});
+            (StatusCode::OK, Json(success_message)).into_response()
+        } else {
+            let error_message =
+                json!({"error":"Question with this specific if not found or it doesn't exists!"});
+            (StatusCode::NOT_FOUND, Json(error_message)).into_response()
+        }
+    } else {
+        let error_message = json!({"error": "Internal server error"});
+        (StatusCode::INTERNAL_SERVER_ERROR, Json(error_message)).into_response()
+    }
+}
+
 // /// Adds a new question to the questions' database.
 // /// This function takes a JSON payloads as input and attempts to add a new entry to the database
 // pub async fn add_question(Json(input): Json<Value>) -> impl IntoResponse {
