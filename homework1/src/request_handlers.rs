@@ -7,7 +7,6 @@ use axum::{
 use serde_json::{json, Value};
 use sqlx::PgPool;
 use std::sync::Arc;
-// use crate::questions_database::questions_module;
 
 /// Retrieves every question from the database.
 ///
@@ -18,10 +17,12 @@ use std::sync::Arc;
 /// A list of every query in the database contained in a JSON answer
 pub async fn fetch_all_questions(State(database_pool): State<Arc<PgPool>>) -> impl IntoResponse {
     // Attempt to fetch all questions from the database
-    let all_questions = sqlx::query_as::<_, QuestionStructure>("SELECT * FROM questions_table")
-        .fetch_all(&*database_pool)
-        .await
-        .expect("Error retrieving questions from the database");
+    let all_questions = sqlx::query_as::<_, QuestionStructure>(
+        "SELECT * FROM questions_table ORDER BY question_id",
+    )
+    .fetch_all(&*database_pool)
+    .await
+    .expect("Error retrieving questions from the database");
 
     // Respond with the list of all questions in JSON format
     Json(all_questions)
@@ -202,44 +203,75 @@ async fn insert_question(
     }
 }
 
-// /// This function retrieves a question by its `id` and updates its fields. If the specified question exists,
-// /// its details are updated or an error response if not found.
-// pub async fn update_question(
-//     Path(id): Path<String>,
-//     Json(input): Json<Value>,
-// ) -> impl IntoResponse {
-//     let mut database = crate::questions_database::QUESTIONS_DATABASE
-//         .write()
-//         .unwrap();
-//
-//     if let Some(question_index) = database.iter().position(|q| q.question_id == id) {
-//         let mut current_question = database[question_index].clone();
-//
-//         if let Some(question_title) = input.get("question_title") {
-//             current_question.question_title = question_title.as_str().unwrap().to_string();
-//         }
-//         if let Some(type_of_content) = input.get("type_of_content") {
-//             current_question.type_of_content = type_of_content.as_str().unwrap().to_string();
-//         }
-//         if let Some(type_of_question) = input.get("type_of_question") {
-//             current_question.type_of_question = type_of_question
-//                 .as_array()
-//                 .unwrap()
-//                 .iter()
-//                 .map(|type_of_question| type_of_question.as_str().unwrap().to_string())
-//                 .collect();
-//         }
-//
-//         database[question_index] = current_question.clone();
-//
-//         let response_body = serde_json::json!({
-//             "message": "Question updated the successfully of current question index",
-//         });
-//         Ok(Json(response_body))
-//     } else {
-//         let error_response = Json(serde_json::json!({
-//             "error": "Question does not exist!"
-//         }));
-//         Err((StatusCode::NOT_FOUND, error_response))
-//     }
-// }
+/// Updates a question in the database.
+///
+/// # Arguments
+/// * `q_id` - The question's ID to update
+/// * `database_pool` - A state that contains the database connection pool
+/// * `Json(payload)` - A JSON payload with the most recent question details
+///
+/// # Returns
+/// An error message will appear if the update is unsuccessful; otherwise, a success message.
+pub async fn update_question(
+    Path(q_id): Path<i32>,
+    State(database_pool): State<Arc<PgPool>>,
+    Json(payload): Json<Value>,
+) -> impl IntoResponse {
+    // Retrieve the existing question from the database
+    let select_query = sqlx::query_as::<_, QuestionStructure>(
+        "SELECT * FROM questions_table WHERE question_id = $1",
+    )
+        .bind(q_id)
+        .fetch_optional(&*database_pool)
+        .await;
+    // Verify whether the question was properly obtained.
+    if let Ok(question)= select_query {
+        // Check if the question exists
+        if let Some(mut existing_question) = question {
+            // If available, update the question fields with the payload data.
+            if let Some(question_title) = payload.get("question_title").and_then(|value| value.as_str()) {
+                existing_question.question_title = question_title.to_string();
+            }
+            if let Some(type_of_content) = payload.get("type_of_content").and_then(|value| value.as_str()) {
+                existing_question.type_of_content = type_of_content.to_string();
+            }
+            if let Some(type_of_question) =
+                payload.get("type_of_question").and_then(|value| value.as_array())
+            {
+                existing_question.type_of_question = type_of_question
+                    .iter()
+                    .filter_map(|t| t.as_str().map(String::from))
+                    .collect();
+            }
+
+            // Update the question in the database
+            let update_query = sqlx::query(
+                "UPDATE questions_table SET question_title = $1, type_of_content = $2, type_of_question = $3 WHERE question_id = $4",
+            )
+                .bind(&existing_question.question_title)
+                .bind(&existing_question.type_of_content)
+                .bind(&existing_question.type_of_question)
+                .bind(q_id)
+                .execute(&*database_pool)
+                .await;
+
+            // Verify if the query update was successful.
+            if let Ok(_) = update_query {
+                let success_message = json!({"message": "Question updated successfully"});
+                (StatusCode::OK, Json(success_message)).into_response()
+            } else {
+                // Take action if the update query is unsuccessful.
+                let error_message = json!({"error": "Internal server error during update of question"});
+                (StatusCode::INTERNAL_SERVER_ERROR, Json(error_message)).into_response()
+            }
+        } else {
+            // Address the situation in which there is no question
+            let error_message = json!({"error":"Question with this specific ID not found or it doesn't exist!"});
+            (StatusCode::NOT_FOUND, Json(error_message)).into_response()
+        }
+    } else {
+        // Address the situation where the question cannot be retrieved.
+        let error_message = json!({"error": "Internal server error"});
+        (StatusCode::INTERNAL_SERVER_ERROR, Json(error_message)).into_response()
+    }
+}
