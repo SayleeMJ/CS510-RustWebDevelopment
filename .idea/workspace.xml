@@ -5,12 +5,11 @@
   </component>
   <component name="CargoProjects">
     <cargoProject FILE="$PROJECT_DIR$/homework1/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/Assignment/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="434cdba5-84d4-4044-ae25-f3aa9cb56d6e" name="Changes" comment="Added insert new question(s)functionality, added comments and RustDoc">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework1/src/request_handlers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/homework1/src/request_handlers.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/homework1/src/request_routes.rs" beforeDir="false" afterPath="$PROJECT_DIR$/homework1/src/request_routes.rs" afterDir="false" />
+    <list default="true" id="434cdba5-84d4-4044-ae25-f3aa9cb56d6e" name="Changes" comment="Updated folder name">
+      <change beforePath="$PROJECT_DIR$/Assignment/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment/Cargo.toml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +52,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/CS510-RustWebDevelopment/Assignment/Cargo.toml",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -87,7 +87,7 @@
       <updated>1714189318810</updated>
       <workItem from="1714189320025" duration="40000" />
       <workItem from="1717196886916" duration="4043000" />
-      <workItem from="1717202995590" duration="34020000" />
+      <workItem from="1717202995590" duration="34517000" />
     </task>
     <task id="LOCAL-00001" summary="Added database connection to postgresSQL and implemented get all questions and get by ID">
       <option name="closed" value="true" />
@@ -113,7 +113,23 @@
       <option name="project" value="LOCAL" />
       <updated>1717270588837</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added update an existing question functionality, added comments and RustDoc">
+      <option name="closed" value="true" />
+      <created>1717276806956</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1717276806956</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated folder name">
+      <option name="closed" value="true" />
+      <created>1717277084470</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1717277084470</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -123,6 +139,8 @@
     <MESSAGE value="Added database connection to postgresSQL and implemented get all questions and get by ID" />
     <MESSAGE value="Added delete question functionality" />
     <MESSAGE value="Added insert new question(s)functionality, added comments and RustDoc" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added insert new question(s)functionality, added comments and RustDoc" />
+    <MESSAGE value="Added update an existing question functionality, added comments and RustDoc" />
+    <MESSAGE value="Updated folder name" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated folder name" />
   </component>
 </project>
