@@ -31,7 +31,7 @@ Rust and Cargo installed (https://www.rust-lang.org/tools/install)
 ```bash
 git clone https://github.com/SayleeMJ/CS510-RustWebDevelopment.git
 
-cd CS510-RustWebDevelopment/homework1
+cd CS510-RustWebDevelopment/Assignment
 ```
 
 - Start the server:
