@@ -1,13 +1,13 @@
 use std::sync::Arc;
 
 use axum::{
-    routing::{delete, get},
+    routing::{delete, get, post},
     Router,
 };
 use sqlx::PgPool;
 
 use crate::request_handlers::{
-    delete_question, fetch_all_questions, get_question_by_id,
+    add_questions, delete_question, fetch_all_questions, get_question_by_id,
 };
 
 /// Sets up the routes for the application
@@ -24,7 +24,7 @@ pub fn setup_routes(database_pool: Arc<PgPool>) -> Router {
         .route("/getAllQuestions", get(fetch_all_questions)) // Route to fetch all questions
         .route("/getQuestionByID/:id", get(get_question_by_id)) // Route to fetch a question by its ID
         .route("/deleteQuestion/:id", delete(delete_question))
+        .route("/addQuestion", post(add_questions))
         .with_state(database_pool)
-    // .route("/addQuestion", post(add_question))
     // .route("/updateQuestion/:id", patch(update_question))
 }
