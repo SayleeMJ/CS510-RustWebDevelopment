@@ -9,7 +9,8 @@ pub mod questions_module {
 
     /// Represents a single question in the database
     /// Each question includes an ID, title, content type and a list of question categories
-    #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]    pub struct QuestionStructure {
+    #[derive(Debug, Clone, Serialize, Deserialize, FromRow)]
+    pub struct QuestionStructure {
         pub question_id: i32,
         pub question_title: String,
         pub type_of_content: String,

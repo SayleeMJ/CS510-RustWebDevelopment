@@ -23,8 +23,8 @@ pub fn setup_routes(database_pool: Arc<PgPool>) -> Router {
     Router::new()
         .route("/getAllQuestions", get(fetch_all_questions)) // Route to fetch all questions
         .route("/getQuestionByID/:id", get(get_question_by_id)) // Route to fetch a question by its ID
-        .route("/deleteQuestion/:id", delete(delete_question))// Route to delete a question by its ID
-        .route("/addQuestion", post(add_questions))// Route to add a new question
-        .route("/updateQuestion/:id", patch(update_question))// Route to update a question by its ID
+        .route("/deleteQuestion/:id", delete(delete_question)) // Route to delete a question by its ID
+        .route("/addQuestion", post(add_questions)) // Route to add a new question
+        .route("/updateQuestion/:id", patch(update_question)) // Route to update a question by its ID
         .with_state(database_pool)
 }

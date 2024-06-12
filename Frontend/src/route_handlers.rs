@@ -1,4 +1,3 @@
-use reqwest;
 use serde::{Deserialize, Serialize};
 use warp::reject::Reject;
 use warp::Rejection;
@@ -50,8 +49,11 @@ async fn fetch_from_backend_api(url: &str) -> Result<String, Rejection> {
 ///
 /// # Returns
 /// A result containing the backend APIs JSON answer or a Warp refusal.
-async fn send_request_to_backend_api(url: &str, method: reqwest::Method, body: Option<&impl Serialize>) -> Result<serde_json::Value, Rejection>{
-
+async fn send_request_to_backend_api(
+    url: &str,
+    method: reqwest::Method,
+    body: Option<&impl Serialize>,
+) -> Result<serde_json::Value, Rejection> {
     // Use the reqwest library to create a new HTTP client.
     let http_client = reqwest::Client::new();
 
@@ -64,8 +66,14 @@ async fn send_request_to_backend_api(url: &str, method: reqwest::Method, body: O
     }
 
     // Send the request, mapping any errors to a specific RetrieveError.
-    let json_response = request_builder.send().await.map_err(|_| warp::reject::custom(RetrieveError))?;
-    let json_data = json_response.json::<serde_json::Value>().await.map_err(|_| warp::reject::custom(RetrieveError))?;
+    let json_response = request_builder
+        .send()
+        .await
+        .map_err(|_| warp::reject::custom(RetrieveError))?;
+    let json_data = json_response
+        .json::<serde_json::Value>()
+        .await
+        .map_err(|_| warp::reject::custom(RetrieveError))?;
 
     // Return the parsed JSON data
     Ok(json_data)
@@ -88,7 +96,7 @@ pub async fn retrieve_all_questions() -> Result<String, Rejection> {
 /// # Returns
 /// A string-formatted JSON response or a Warp rejection.
 pub async fn retrieve_question_by_id(question_id: i32) -> Result<String, Rejection> {
-    let backend_api_url = format!("http://localhost:1000/getQuestionByID/{}", question_id.to_string());
+    let backend_api_url = format!("http://localhost:1000/getQuestionByID/{}", question_id);
     fetch_from_backend_api(&backend_api_url).await
 }
 
@@ -101,7 +109,9 @@ pub async fn retrieve_question_by_id(question_id: i32) -> Result<String, Rejecti
 /// A JSON response or a Warp rejection.
 pub async fn add_new_question(new_question: NewQuestion) -> Result<impl warp::Reply, Rejection> {
     let backend_api_url = "http://localhost:1000/addQuestion";
-    let json_data = send_request_to_backend_api(backend_api_url, reqwest::Method::POST, Some(&new_question)).await?;
+    let json_data =
+        send_request_to_backend_api(backend_api_url, reqwest::Method::POST, Some(&new_question))
+            .await?;
     Ok(warp::reply::json(&json_data))
 }
 
@@ -116,10 +126,18 @@ pub async fn add_new_question(new_question: NewQuestion) -> Result<impl warp::Re
 ///
 /// # Errors
 /// If the backend API request fails, this method returns a 'RetrieveError'.
-pub async fn update_question_by_id(question_id: i32, updated_question: NewQuestion) -> Result<impl warp::Reply, Rejection> {
+pub async fn update_question_by_id(
+    question_id: i32,
+    updated_question: NewQuestion,
+) -> Result<impl warp::Reply, Rejection> {
     // Create the backend API URL using the question ID.
-    let backend_api_url = format!("http://localhost:1000/updateQuestion/{}", question_id.to_string());
-    let json_data = send_request_to_backend_api(&backend_api_url, reqwest::Method::PATCH, Some(&updated_question)).await?;
+    let backend_api_url = format!("http://localhost:1000/updateQuestion/{}", question_id);
+    let json_data = send_request_to_backend_api(
+        &backend_api_url,
+        reqwest::Method::PATCH,
+        Some(&updated_question),
+    )
+    .await?;
     Ok(warp::reply::json(&json_data))
 }
 
@@ -131,7 +149,8 @@ pub async fn update_question_by_id(question_id: i32, updated_question: NewQuesti
 /// # Returns
 /// A JSON answer or Warp rejection.
 pub async fn delete_question_by_id(question_id: i32) -> Result<impl warp::Reply, Rejection> {
-    let backend_api_url = format!("http://localhost:1000/deleteQuestion/{}", question_id.to_string());
-    let json_data = send_request_to_backend_api(&backend_api_url, reqwest::Method::DELETE, None::<&()>).await?;
+    let backend_api_url = format!("http://localhost:1000/deleteQuestion/{}", question_id);
+    let json_data =
+        send_request_to_backend_api(&backend_api_url, reqwest::Method::DELETE, None::<&()>).await?;
     Ok(warp::reply::json(&json_data))
 }

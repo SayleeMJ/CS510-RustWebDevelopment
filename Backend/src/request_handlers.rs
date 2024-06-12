@@ -221,22 +221,29 @@ pub async fn update_question(
     let select_query = sqlx::query_as::<_, QuestionStructure>(
         "SELECT * FROM questions_table WHERE question_id = $1",
     )
-        .bind(q_id)
-        .fetch_optional(&*database_pool)
-        .await;
+    .bind(q_id)
+    .fetch_optional(&*database_pool)
+    .await;
     // Verify whether the question was properly obtained.
-    if let Ok(question)= select_query {
+    if let Ok(question) = select_query {
         // Check if the question exists
         if let Some(mut existing_question) = question {
             // If available, update the question fields with the payload data.
-            if let Some(question_title) = payload.get("question_title").and_then(|value| value.as_str()) {
+            if let Some(question_title) = payload
+                .get("question_title")
+                .and_then(|value| value.as_str())
+            {
                 existing_question.question_title = question_title.to_string();
             }
-            if let Some(type_of_content) = payload.get("type_of_content").and_then(|value| value.as_str()) {
+            if let Some(type_of_content) = payload
+                .get("type_of_content")
+                .and_then(|value| value.as_str())
+            {
                 existing_question.type_of_content = type_of_content.to_string();
             }
-            if let Some(type_of_question) =
-                payload.get("type_of_question").and_then(|value| value.as_array())
+            if let Some(type_of_question) = payload
+                .get("type_of_question")
+                .and_then(|value| value.as_array())
             {
                 existing_question.type_of_question = type_of_question
                     .iter()
@@ -256,17 +263,19 @@ pub async fn update_question(
                 .await;
 
             // Verify if the query update was successful.
-            if let Ok(_) = update_query {
+            if update_query.is_ok() {
                 let success_message = json!({"message": "Question updated successfully"});
                 (StatusCode::OK, Json(success_message)).into_response()
             } else {
                 // Take action if the update query is unsuccessful.
-                let error_message = json!({"error": "Internal server error during update of question"});
+                let error_message =
+                    json!({"error": "Internal server error during update of question"});
                 (StatusCode::INTERNAL_SERVER_ERROR, Json(error_message)).into_response()
             }
         } else {
             // Address the situation in which there is no question
-            let error_message = json!({"error":"Question with this specific ID not found or it doesn't exist!"});
+            let error_message =
+                json!({"error":"Question with this specific ID not found or it doesn't exist!"});
             (StatusCode::NOT_FOUND, Json(error_message)).into_response()
         }
     } else {
