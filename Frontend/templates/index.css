@@ -1,0 +1,148 @@
+/* Base styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #e0f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1, h2 {
+    text-align: center;
+}
+
+h1 {
+    background-color: #00796b;
+    color: white;
+    padding: 20px;
+    margin: 0;
+}
+
+h2 {
+    margin: 20px 0;
+}
+
+#fetchSection {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+#fetchSection label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+#questionIdInput {
+    width: calc(100% - 22px);
+    padding: 10px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#fetchQuestionButton {
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    background-color: #00796b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+#fetchQuestionButton:hover {
+    background-color: #004d40;
+}
+
+#questionDetail {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: none; /* Initially hidden */
+}
+
+#questionDetail.visible {
+    display: block;
+}
+
+#allQuestions {
+    list-style-type: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 1200px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#allQuestions li {
+    background: white;
+    margin: 10px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: calc(100% - 40px); /* Full width minus margins for small screens */
+    box-sizing: border-box;
+}
+
+.id {
+    font-weight: bold;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.content-type, .question-types {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Responsive design */
+@media (min-width: 600px) {
+    #allQuestions li {
+        width: calc(50% - 40px); /* Half width minus margins for medium screens */
+    }
+}
+
+@media (min-width: 900px) {
+    #allQuestions li {
+        width: calc(33.333% - 40px); /* Third width minus margins for large screens */
+    }
+}
+
+/* Accessibility improvements */
+:focus {
+    outline: 2px solid #00796b;
+}
+
+button:focus {
+    outline: none;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}

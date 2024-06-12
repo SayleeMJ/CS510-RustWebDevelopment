@@ -4,12 +4,41 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="CargoProjects">
-    <cargoProject FILE="$PROJECT_DIR$/homework1/Cargo.toml" />
-    <cargoProject FILE="$PROJECT_DIR$/Assignment/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/Frontend/Cargo.toml" />
+    <cargoProject FILE="$PROJECT_DIR$/Backend/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="434cdba5-84d4-4044-ae25-f3aa9cb56d6e" name="Changes" comment="Updated folder name">
-      <change beforePath="$PROJECT_DIR$/Assignment/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Assignment/Cargo.toml" afterDir="false" />
+    <list default="true" id="434cdba5-84d4-4044-ae25-f3aa9cb56d6e" name="Changes" comment="Added front-end code for fetching all questions and fetching question by ID">
+      <change afterPath="$PROJECT_DIR$/Frontend/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/Cargo.toml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/src/main.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/src/route_handlers.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/src/routes.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/lock_api-fce904c39d8b4b7f/out/probe0.ll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/proc-macro2-b220ed0d0054b486/out/proc_macro2.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/slab-ed9679c7ebe2122c/out/probe0.ll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/thiserror-0d3dad5cb600d565/out/thiserror.d" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/typenum-fd38d8925d701f38/out/consts.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/typenum-fd38d8925d701f38/out/op.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/target/debug/build/typenum-fd38d8925d701f38/out/tests.rs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/templates/index.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Frontend/templates/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/CS510-RustWebDevelopment.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/CS510-RustWebDevelopment.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.env" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/homework1.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/homework1.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/src/questions_database.rs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/questions_database.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/src/request_handlers.rs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/request_handlers.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assignment/src/request_routes.rs" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/request_routes.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +63,9 @@
   <component name="MacroExpansionManager">
     <option name="directoryName" value="sx7jiqa2" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 3
@@ -48,11 +80,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
     "Cargo.Run homework1.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/CS510-RustWebDevelopment/Assignment/Cargo.toml",
+    "last_opened_file_path": "D:/CS510-RustWebDevelopment/Frontend",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
@@ -60,9 +95,18 @@
     "org.rust.cargo.project.model.PROJECT_DISCOVERY": "true",
     "org.rust.cargo.project.model.impl.CargoExternalSystemProjectAware.subscribe.first.balloon": "",
     "org.rust.first.attach.projects": "true",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\CS510-RustWebDevelopment\Frontend" />
+    </key>
+  </component>
   <component name="RustProjectSettings">
     <option name="toolchainHomeDirectory" value="$USER_HOME$/.cargo/bin" />
   </component>
@@ -88,6 +132,11 @@
       <workItem from="1714189320025" duration="40000" />
       <workItem from="1717196886916" duration="4043000" />
       <workItem from="1717202995590" duration="34517000" />
+      <workItem from="1717824827273" duration="21000" />
+      <workItem from="1717824896104" duration="72000" />
+      <workItem from="1718136738265" duration="873000" />
+      <workItem from="1718176458774" duration="3293000" />
+      <workItem from="1718180505548" duration="10697000" />
     </task>
     <task id="LOCAL-00001" summary="Added database connection to postgresSQL and implemented get all questions and get by ID">
       <option name="closed" value="true" />
@@ -136,11 +185,13 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added database connection to postgresSQL and implemented get all questions and get by ID" />
     <MESSAGE value="Added delete question functionality" />
     <MESSAGE value="Added insert new question(s)functionality, added comments and RustDoc" />
     <MESSAGE value="Added update an existing question functionality, added comments and RustDoc" />
     <MESSAGE value="Updated folder name" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated folder name" />
+    <MESSAGE value="Added front-end code for fetching all questions and fetching question by ID" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added front-end code for fetching all questions and fetching question by ID" />
   </component>
 </project>

@@ -56,7 +56,7 @@ VALUES ('Hello', 'How are you?', '{"Greeting"}');
 ```bash
 git clone https://github.com/SayleeMJ/CS510-RustWebDevelopment.git
 
-cd CS510-RustWebDevelopment/Assignment
+cd CS510-RustWebDevelopment/Backend
 ```
 
 - Start the server:
