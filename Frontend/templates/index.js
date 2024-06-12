@@ -9,7 +9,7 @@ async function fetchJsonFormat(url) {
     const jsonResponse = await fetch(url);
 
     if (!jsonResponse.ok) {
-        throw new Error('Network response was not ok');
+        throw new Error('Error occurred  in network response');
     }
 
     return await jsonResponse.json();
@@ -26,17 +26,18 @@ async function fetchAllQuestions() {
         const allQuestions = await fetchJsonFormat('/allQuestions');
         displayAllQuestions(allQuestions);
     } catch (error) {
-        console.error('Failed to fetch questions:', error);
+        console.error('Failed to fetch questions from database:', error);
     }
 }
 
 /**
  *  This asynchronous function retrieves a question by its ID from the backend API via a GET call to the
  *  '/getQuestionByID/:id' endpoint.
- *  If the request is successful, it evaluates the JSON response and executes the displayQuestionDetail method to show the question details.
+ *  If the request is successful, it evaluates the JSON response and executes the displayQuestionById method to show the question details.
  *  If the request fails, it sends an error message to the console.
  */
-async function fetchQuestionById() {
+async function fetchQuestionById(event) {
+    event.preventDefault();
     const questionId = document.getElementById('questionIdInput').value;
     if (!questionId) {
         alert("Please enter a question ID.");
@@ -45,7 +46,7 @@ async function fetchQuestionById() {
 
     try {
         const questionDetails = await fetchJsonFormat(`/getQuestionByID/${questionId}`);
-        displayQuestionDetail(questionDetails);
+        displayQuestionById(questionDetails);
     } catch (error) {
         console.error('Failed to fetch question:', error);
     }
@@ -57,7 +58,7 @@ async function fetchQuestionById() {
  * @param {Object} question - The question object contains its details.
  * @returns {string} - HTML content for the question.
  */
-function generateQuestionHTML(question) {
+function htmlFormat(question) {
     return `
         <div class="id">Question ID: ${question.question_id}</div>
         <div class="title">Question Title: ${question.question_title}</div>
@@ -80,7 +81,7 @@ function displayAllQuestions(allQuestions) {
 
     allQuestions.forEach(question => {
         const listItem = document.createElement('li');
-        listItem.innerHTML = generateQuestionHTML(question);
+        listItem.innerHTML = htmlFormat(question);
         questionsIDElement.appendChild(listItem);
     });
 }
@@ -92,20 +93,101 @@ function displayAllQuestions(allQuestions) {
  *
  * @param {Object} questionDetail - The question object containing its details
  */
-function displayQuestionDetail(questionDetail) {
+function displayQuestionById(questionDetail) {
     const questionDetailElement = document.getElementById('questionDetail');
 
     if (questionDetail.error) {
         questionDetailElement.innerHTML = `<div class="error">${questionDetail.error}</div>`;
     } else {
-        questionDetailElement.innerHTML = generateQuestionHTML(questionDetail);
+        questionDetailElement.innerHTML = htmlFormat(questionDetail);
     }
 
     questionDetailElement.classList.add('visible');
 }
 
-// Add an event listener that calls fetchAllQuestions when the DOM content is loaded.
-document.addEventListener('DOMContentLoaded', fetchAllQuestions);
+/**
+ * This asynchronous function makes a POST call to the backend API to add a new question.
+ * The question information are gathered from the form inputs.
+ *
+ * @param {Event} event - The form submission event.
+ */
+async function addNewQuestion(event) {
+    event.preventDefault();
+
+    // Obtain values from the form inputs.
+    const questionTitle = document.getElementById('questionTitle').value;
+    const typeOfContent = document.getElementById('typeOfContent').value;
+    const typeOfQuestion = document.getElementById('typeOfQuestion').value.split(',').map(str => str.trim());
+
+    const newQuestion = {
+        question_title: questionTitle,
+        type_of_content: typeOfContent,
+        type_of_question: typeOfQuestion
+    };
+
+    try {
+        // To add the new question, send a POST request to the backend.
+        const json_response = await fetch('/addQuestion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newQuestion)
+        });
+
+        // Check if the json_response is not okay, and throw an error if it is.
+        if (!json_response.ok) {
+            throw new Error('Error occurred in network json_response');
+        }
+
+        // Parse the server's JSON answer.
+        const response_result = await json_response.json();
+
+        // Send a message to the user from the server.
+        alert(response_result.message);
+
+        // Reset form inputs.
+        document.getElementById('addNewQuestionForm').reset();
+
+        // To refresh the list of questions, fetch all questions again.
+        await fetchAllQuestions();
+    } catch (error) {
+
+        // If the request fails, log the error in the console and notify the user.
+        console.error('Failed to add a new question:', error);
+        alert('Failed to add a new question. Please try again!');
+    }
+}
+
+/**
+ * Function that handles navigation and displays the corresponding section.
+ */
+function handlePageNavigation(event) {
+    event.preventDefault();
+
+    // Take the 'active' class out of all sections.
+    document.querySelectorAll('.section').forEach(section => {
+        section.classList.remove('active');
+    });
+
+    // Take the 'active' class out of all sections.
+    const targetSection = document.querySelector(event.target.getAttribute('href'));
+    targetSection.classList.add('active');
+}
+
+// Configure event listeners for the navigation links.
+document.querySelectorAll('.nav-link').forEach(link => {
+    link.addEventListener('click', handlePageNavigation);
+});
+
+// Display the default section when the page loads.
+document.addEventListener('DOMContentLoaded', () => {
+    fetchAllQuestions().then(() => "Could not find questions in database!"); // Fetch all questions on page load
+    document.querySelector('#fetchAllQuestionsSection').classList.add('active'); // Show the default section
+});
 
 // Add an event listener for the fetch button
 document.getElementById('fetchQuestionButton').addEventListener('click', fetchQuestionById);
+
+// Add an event listener for the add question form
+document.getElementById('addNewQuestionForm').addEventListener('submit', addNewQuestion);

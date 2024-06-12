@@ -1,53 +1,97 @@
 /* Base styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #e0f7fa;
+    background-color: lightblue;
     color: #333;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
 }
 
-h1, h2 {
-    text-align: center;
-}
-
-h1 {
-    background-color: #00796b;
+header {
+    background-color: teal;
     color: white;
     padding: 20px;
+    text-align: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header h1 {
     margin: 0;
 }
 
-h2 {
-    margin: 20px 0;
+nav {
+    margin-top: 10px;
 }
 
-#fetchSection {
-    max-width: 600px;
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+
+}
+
+nav ul li {
+    display: inline;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    background-color: cadetblue;
+
+}
+
+nav ul li a:hover {
+    background-color: #004d40;
+}
+
+main {
+    max-width: 900px;
     margin: 20px auto;
     padding: 20px;
     background: white;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 40px;
+}
+
+h2 {
+    margin-top: 0;
+    color: teal;
     text-align: center;
 }
 
-#fetchSection label {
-    display: block;
-    margin-bottom: 10px;
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 5px;
     font-weight: bold;
 }
 
-#questionIdInput {
-    width: calc(100% - 22px);
+form input {
+    margin-bottom: 10px;
     padding: 10px;
     font-size: 1em;
-    margin-bottom: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
 }
 
-#fetchQuestionButton {
+button {
     padding: 10px 20px;
     font-size: 1em;
     cursor: pointer;
@@ -56,20 +100,30 @@ h2 {
     border: none;
     border-radius: 4px;
     transition: background-color 0.3s ease;
+    align-self: flex-start;
 }
 
-#fetchQuestionButton:hover {
+button:hover {
     background-color: #004d40;
 }
 
+#errorMessage {
+    color: red;
+    font-weight: bold;
+}
+
 #questionDetail {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
+    background: whitesmoke;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-top: 20px;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
     display: none; /* Initially hidden */
+}
+
+#questionDetail:hover{
+    background-color: lightgrey;
 }
 
 #questionDetail.visible {
@@ -79,21 +133,24 @@ h2 {
 #allQuestions {
     list-style-type: none;
     padding: 0;
-    margin: 20px auto;
-    max-width: 1200px;
+    margin: 0;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    gap: 20px;
 }
 
 #allQuestions li {
-    background: white;
-    margin: 10px;
+    background: whitesmoke;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: calc(100% - 40px); /* Full width minus margins for small screens */
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+    width: calc(33.333% - 20px); /* Third width minus margins for large screens */
     box-sizing: border-box;
+}
+
+#allQuestions li:hover {
+    background-color: lightgrey;
 }
 
 .id {
@@ -121,15 +178,15 @@ h2 {
 }
 
 /* Responsive design */
-@media (min-width: 600px) {
+@media (max-width: 900px) {
     #allQuestions li {
-        width: calc(50% - 40px); /* Half width minus margins for medium screens */
+        width: calc(50% - 20px); /* Half width minus margins for medium screens */
     }
 }
 
-@media (min-width: 900px) {
+@media (max-width: 600px) {
     #allQuestions li {
-        width: calc(33.333% - 40px); /* Third width minus margins for large screens */
+        width: calc(100% - 20px); /* Full width minus margins for small screens */
     }
 }
 
@@ -145,4 +202,14 @@ button:focus {
 .error {
     color: red;
     font-weight: bold;
+}
+
+/* Hide sections by default */
+.section {
+    display: none;
+}
+
+/* Show the active section */
+.section.active {
+    display: block;
 }
