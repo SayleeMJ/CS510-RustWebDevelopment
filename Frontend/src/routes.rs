@@ -1,8 +1,6 @@
 use warp::{http::Response, Filter};
 
-use crate::route_handlers::{
-    add_new_question, retrieve_all_questions, retrieve_question_by_id, update_question_by_id,
-};
+use crate::route_handlers::{add_new_question, delete_question_by_id, retrieve_all_questions, retrieve_question_by_id, update_question_by_id};
 
 /// Utility function for formatting the API response.
 fn api_format_response(response_body: String) -> Result<impl warp::Reply, warp::Rejection> {
@@ -52,12 +50,18 @@ pub fn create_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::
         .and(warp::body::json())
         .and_then(update_question_by_id);
 
+    // API route for deleting a question
+    let delete_question_route = warp::path!("deleteQuestion" / i32)
+        .and(warp::delete())
+        .and_then(delete_question_by_id);
+
     // Combine all routes
     let all_routes = html_route
         .or(fetch_all_questions_route)
         .or(fetch_question_by_id_route)
         .or(add_new_question_route)
         .or(update_questions_route)
+        .or(delete_question_route)
         .or(css_route)
         .or(js_route);
     return all_routes;

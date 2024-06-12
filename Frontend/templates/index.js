@@ -168,6 +168,7 @@ async function addNewQuestion(event) {
 async function updateQuestion(event) {
     event.preventDefault();
 
+    // Obtain values from the form inputs.
     const questionId = document.getElementById('updateQuestionId').value;
     const questionTitle = document.getElementById('updateQuestionTitle').value;
     const typeOfContent = document.getElementById('updateTypeOfContent').value;
@@ -194,11 +195,46 @@ async function updateQuestion(event) {
 
         const response_result = await json_response.json();
         alert(response_result.message);
+
+        // Reset form inputs.
         document.getElementById('updateQuestionForm').reset();
         await fetchAllQuestions(); // Refresh the list of questions
     } catch (error) {
+        // If the request fails, log the error in the console and notify the user.
         console.error('Failed to update question:', error);
         alert('Failed to update question. Please try again.');
+    }
+}
+
+/**
+ * To delete a question, issue a DELETE request to the backend API.
+ *
+ * @param {Event} event - The form submission event.
+ */
+async function deleteQuestionById(event) {
+    event.preventDefault();
+
+    const questionId = document.getElementById('deleteQuestionId').value;
+
+    try {
+        const json_response = await fetch(`/deleteQuestion/${questionId}`, {
+            method: 'DELETE'
+        });
+
+        if (!json_response.ok) {
+            throw new Error('Error occurred  in network response');
+        }
+
+        const json_result = await json_response.json();
+        alert(json_result.message);
+
+        // Reset form inputs.
+        document.getElementById('deleteQuestionForm').reset();
+        await fetchAllQuestions();
+    } catch (error) {
+        // If the request fails, log the error in the console and notify the user.
+        console.error('Failed to delete the question:', error);
+        alert('Failed to delete the question. Please try again.');
     }
 }
 
@@ -235,4 +271,9 @@ document.getElementById('fetchQuestionButton').addEventListener('click', fetchQu
 // Add an event listener for the add question form
 document.getElementById('addNewQuestionForm').addEventListener('submit', addNewQuestion);
 
+
+// Add an event listener for the update question form
 document.getElementById('updateQuestionForm').addEventListener('submit', updateQuestion);
+
+// Add an event listener for the delete question form
+document.getElementById('deleteQuestionForm').addEventListener('submit', deleteQuestionById);

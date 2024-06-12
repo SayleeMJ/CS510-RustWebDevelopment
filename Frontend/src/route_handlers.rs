@@ -122,3 +122,16 @@ pub async fn update_question_by_id(question_id: i32, updated_question: NewQuesti
     let json_data = send_request_to_backend_api(&backend_api_url, reqwest::Method::PATCH, Some(&updated_question)).await?;
     Ok(warp::reply::json(&json_data))
 }
+
+/// To delete a question by ID, sends a DELETE request to the backend API.
+///
+/// # Parameters
+/// - `question_id`: The ID of the question that will be erased.
+///
+/// # Returns
+/// A JSON answer or Warp rejection.
+pub async fn delete_question_by_id(question_id: i32) -> Result<impl warp::Reply, Rejection> {
+    let backend_api_url = format!("http://localhost:1000/deleteQuestion/{}", question_id.to_string());
+    let json_data = send_request_to_backend_api(&backend_api_url, reqwest::Method::DELETE, None::<&()>).await?;
+    Ok(warp::reply::json(&json_data))
+}
