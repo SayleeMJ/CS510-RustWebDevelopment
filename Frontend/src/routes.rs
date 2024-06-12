@@ -1,6 +1,8 @@
 use warp::{http::Response, Filter};
 
-use crate::route_handlers::{add_new_question, retrieve_all_questions, retrieve_question_by_id};
+use crate::route_handlers::{
+    add_new_question, retrieve_all_questions, retrieve_question_by_id, update_question_by_id,
+};
 
 /// Utility function for formatting the API response.
 fn api_format_response(response_body: String) -> Result<impl warp::Reply, warp::Rejection> {
@@ -11,7 +13,10 @@ fn api_format_response(response_body: String) -> Result<impl warp::Reply, warp::
 }
 
 /// Create a route to serve static files (HTML, CSS, and JavaScript).
-fn static_file_routes(path: &'static str, file: &'static str) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
+fn static_file_routes(
+    path: &'static str,
+    file: &'static str,
+) -> impl Filter<Extract = impl warp::Reply, Error = warp::Rejection> + Clone {
     warp::path(path).and(warp::fs::file(file))
 }
 
@@ -28,16 +33,12 @@ pub fn create_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::
     // API routes for fetching questions
     let fetch_all_questions_route = warp::path("allQuestions")
         .and_then(retrieve_all_questions)
-        .and_then(|response_body| async {
-            api_format_response(response_body)
-        });
+        .and_then(|response_body| async { api_format_response(response_body) });
 
     // API route for fetching questions by ID
     let fetch_question_by_id_route = warp::path!("getQuestionByID" / i32)
         .and_then(retrieve_question_by_id)
-        .and_then(|response_body| async {
-            api_format_response(response_body)
-        });
+        .and_then(|response_body| async { api_format_response(response_body) });
 
     // API route for adding a new question
     let add_new_question_route = warp::path("addQuestion")
@@ -45,11 +46,18 @@ pub fn create_routes() -> impl Filter<Extract = impl warp::Reply, Error = warp::
         .and(warp::body::json())
         .and_then(add_new_question);
 
+    // API route for updating a existing question
+    let update_questions_route = warp::path!("updateQuestion" / i32)
+        .and(warp::patch())
+        .and(warp::body::json())
+        .and_then(update_question_by_id);
+
     // Combine all routes
     let all_routes = html_route
         .or(fetch_all_questions_route)
         .or(fetch_question_by_id_route)
         .or(add_new_question_route)
+        .or(update_questions_route)
         .or(css_route)
         .or(js_route);
     return all_routes;

@@ -15,6 +15,7 @@
             <li><a href="#fetchAllQuestionsSection" class="nav-link">All Questions</a></li>
             <li><a href="#fetchQuestionByIdSection" class="nav-link">Search Question</a></li>
             <li><a href="#addNewQuestionSection" class="nav-link">Add Question</a></li>
+            <li><a href="#updateQuestionSection" class="nav-link">Update Question</a></li>
         </ul>
     </nav>
 </header>
@@ -31,7 +32,8 @@
         <h2>Search Question by ID</h2>
         <form id="fetchQuestionForm">
             <label for="questionIdInput">Question ID:</label>
-            <input type="text" id="questionIdInput" placeholder="Enter question ID" aria-labelledby="questionIdInput" required>
+            <input type="text" id="questionIdInput" placeholder="Enter question ID" aria-labelledby="questionIdInput"
+                   required>
             <button type="submit" id="fetchQuestionButton">Search Question</button>
         </form>
         <div id="questionDetail"></div>
@@ -51,6 +53,26 @@
             <input type="text" id="typeOfQuestion" placeholder="Enter types of question" required>
 
             <button type="submit" id="addNewQuestionButton">Add Question</button>
+        </form>
+    </section>
+
+    <!-- Section to update a question -->
+    <section id="updateQuestionSection" class="section">
+        <h2>Update Question</h2>
+        <form id="updateQuestionForm">
+            <label for="updateQuestionId">Question ID:</label>
+            <input type="text" id="updateQuestionId" placeholder="Enter question ID" required>
+
+            <label for="updateQuestionTitle">Question Title:</label>
+            <input type="text" id="updateQuestionTitle" placeholder="Enter question title" required>
+
+            <label for="updateTypeOfContent">Type of Content:</label>
+            <input type="text" id="updateTypeOfContent" placeholder="Enter type of content" required>
+
+            <label for="updateTypeOfQuestion">Type of Question (separate by comma):</label>
+            <input type="text" id="updateTypeOfQuestion" placeholder="Enter types of question" required>
+
+            <button type="submit" id="updateQuestionButton">Update Question</button>
         </form>
     </section>
 

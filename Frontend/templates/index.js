@@ -160,6 +160,49 @@ async function addNewQuestion(event) {
 }
 
 /**
+ * Handles the submission of the updated question form.
+ * This function initiates a PATCH request to the backend API in order to update an existing inquiry.
+ *
+ * @param {Event} event - The form submission event.
+ */
+async function updateQuestion(event) {
+    event.preventDefault();
+
+    const questionId = document.getElementById('updateQuestionId').value;
+    const questionTitle = document.getElementById('updateQuestionTitle').value;
+    const typeOfContent = document.getElementById('updateTypeOfContent').value;
+    const typeOfQuestion = document.getElementById('updateTypeOfQuestion').value.split(',').map(str => str.trim());
+
+    const updatedQuestion = {
+        question_title: questionTitle,
+        type_of_content: typeOfContent,
+        type_of_question: typeOfQuestion
+    };
+
+    try {
+        const json_response = await fetch(`/updateQuestion/${questionId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedQuestion)
+        });
+
+        if (!json_response.ok) {
+            throw new Error('Error occurred  in network response');
+        }
+
+        const response_result = await json_response.json();
+        alert(response_result.message);
+        document.getElementById('updateQuestionForm').reset();
+        await fetchAllQuestions(); // Refresh the list of questions
+    } catch (error) {
+        console.error('Failed to update question:', error);
+        alert('Failed to update question. Please try again.');
+    }
+}
+
+/**
  * Function that handles navigation and displays the corresponding section.
  */
 function handlePageNavigation(event) {
@@ -191,3 +234,5 @@ document.getElementById('fetchQuestionButton').addEventListener('click', fetchQu
 
 // Add an event listener for the add question form
 document.getElementById('addNewQuestionForm').addEventListener('submit', addNewQuestion);
+
+document.getElementById('updateQuestionForm').addEventListener('submit', updateQuestion);
