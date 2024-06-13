@@ -4,18 +4,33 @@
 This repository is for homework (course CS510-RustWebDevelopment Spring 2024)
 
 
-## Assignment (Persistent Data)
+## Assignment (Rust REST Front End)
 
-This project in Rust includes a RESTful API for question database management constructed with the web framework Axum and Persistent database such as PostgresSQL.
+This is a web application created as part of the CS510-RustWebDevelopment course in Spring 2024. It uses the Rust programming language to provide a RESTful API for managing a question database, with the Axum framework for the backend and the Warp framework for the frontend.
 
-### Project Structure
+The backend uses a PostgresSQL database to store, retrieve, update, and delete questions. It demonstrates the efficient handling of HTTP requests, data validation, and error management for online services.
+
+The front end, developed with Warp, provides a user-friendly interface enabling seamless API interaction. This covers viewing all questions, retrieving information about specific questions, adding new questions, updating existing ones, and deleting questions.
+
+
+### Backend Project Structure
 - src/main.rs - The main entry point for the application and handles the server functionality.
 - src/questions_database.rs - Module for managing the question database.
 - src/request_handlers.rs - Contains handlers for API routes.
 - src/request_routes.rs - Sets up the route configuration.
 
-### Features
-- GET /getAllQuestions - Retrieve a list of all questions.
+### Frontend Project Structure
+- `main.rs`: Sets up the Warp server and configures the routing.
+- `route_handlers.rs`: Defines the logic for processing API requests to the backend.
+- `routers.rs`: Sets up the routes for providing static files and managing API queries.
+- `templates/`: Contains static files for the front-end user interface.
+    - `index.html`: Main HTML file used to structure the web page.
+    - `index.css`: A stylesheet defines the visual appearance of a web page.
+    - `index.js`: The JavaScript file is used to communicate with the backend API and dynamically update the web page.
+
+
+### Backend Features
+- GET /getQuestions - Retrieve a list of all questions.
 - GET /getQuestionByID/:id - Retrieve a specific question by its ID.
 - DELETE /deleteQuestion/:id - Delete a question by its ID.
 - CREATE /addQuestion - Add a new question.
@@ -23,7 +38,7 @@ This project in Rust includes a RESTful API for question database management co
 
 ### Prerequisites
 - Rust and Cargo installed (https://www.rust-lang.org/tools/install)
-- PostgreSQL installed (https://www.postgresql.org/download/)
+- PostgresSQL installed (https://www.postgresql.org/download/)
 
 ### Database Setup
 Create the database:
@@ -53,6 +68,8 @@ VALUES ('Hello', 'How are you?', '{"Greeting"}');
 
 -  Clone this repository and go to the specific folder:
 
+#### Backend Installation:
+
 ```bash
 git clone https://github.com/SayleeMJ/CS510-RustWebDevelopment.git
 
@@ -63,7 +80,19 @@ cd CS510-RustWebDevelopment/Backend
 ```bash
 cargo run
 ```
-*The server will typically listen on port 1000.*
+*The server will typically listen on port http://localhost:1000/*
+
+#### Frontend Installation
+
+```bash
+cd CS510-RustWebDevelopment/Frontend
+```
+
+- Start the server:
+```bash
+cargo run
+```
+*The server will typically listen on port http://localhost:2000/*
 
 ### References
 - https://github.com/pdx-cs-rust-web/knock-knock/tree/main
